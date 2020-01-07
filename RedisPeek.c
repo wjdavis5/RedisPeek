@@ -12,18 +12,25 @@ int HelloworldRand_RedisCommand(RedisModuleCtx *ctx, RedisModuleString **argv, i
         RedisModule_ReplyWithCallReply(ctx, rep);
         return REDISMODULE_ERR;
     }
-    RedisModule_ReplyWithCallReply(ctx, rep);
+    RedisModuleString *returnTypeString;
+    RedisModuleCallReply *peekRep;
+
+    returnTypeString = RedisModule_CreateStringFromCallReply(rep);
+    RedisModuleString *returnPeekString;
+
     switch (RedisModule_CallReplyType(rep))
     {
     case REDISMODULE_REPLY_STRING:
-        rep = RedisModule_Call(ctx, "GET", "s", argv[1]);
+        peekRep = RedisModule_Call(ctx, "GET", "s", argv[1]);
+        returnPeekString = RedisModule_CreateStringFromCallReply(peekRep);
         break;
     
     default:
         break;
     }
-    
-    RedisModule_ReplyWithCallReply(ctx, rep);
+    RedisModule_ReplyWithArray(ctx, 2);
+    RedisModule_ReplyWithString(ctx,returnTypeString);
+    RedisModule_ReplyWithString(ctx,returnPeekString);
     return REDISMODULE_OK;
 }
 
