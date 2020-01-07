@@ -10,4 +10,7 @@ Test it out
 ```
 redis-cli set a a
 redis-cli PEEK a
+---
+1) "string"
+2) "a"
 ```
